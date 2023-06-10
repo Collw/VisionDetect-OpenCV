@@ -1,4 +1,4 @@
-# Assistente de Detecção de Rostos e Mãos - README
+# Visão computacional de Detecção de Rostos e Mãos - README
 
 Este projeto implementa um programa em C++ que utiliza a biblioteca OpenCV para realizar a detecção de rostos, mãos fechadas e mãos abertas em tempo real a partir de uma captura de vídeo da câmera.
 
