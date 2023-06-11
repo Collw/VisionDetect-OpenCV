@@ -13,22 +13,22 @@ int main() {
 
     setlocale(LC_ALL, "Portuguese");
 
-    // Carregando o arquivo de modelo prÈ-treinado para detecÁ„o facial
+    // Carregando o arquivo de modelo pr√©-treinado para detec√ß√£o facial
     CascadeClassifier face_cascade;
-    face_cascade.load("C:\\Users\\Usu·rio\\Documents\\opencvfiles\\data\\haarcascades\\haarcascade_frontalface_default.xml");
+    face_cascade.load("C:\\Users\\Usu√°rio\\Documents\\opencvfiles\\data\\haarcascades\\haarcascade_frontalface_default.xml");
 
-    // Carregando o arquivo de modelo prÈ-treinado para detecÁ„o de m„os
+    // Carregando o arquivo de modelo pr√©-treinado para detec√ß√£o de m√£os
     CascadeClassifier hand_cascade;
-    hand_cascade.load("C:\\Users\\Usu·rio\\Documents\\opencvfiles\\data\\haarcascades\\hand.xml");
+    hand_cascade.load("C:\\Users\\Usu√°rio\\Documents\\opencvfiles\\data\\haarcascades\\hand.xml");
 
-    // Carregando o arquivo de modelo prÈ-treinado para detecÁ„o de m„os abertas
+    // Carregando o arquivo de modelo pr√©-treinado para detec√ß√£o de m√£os abertas
     CascadeClassifier palm_cascade;
-    palm_cascade.load("C:\\Users\\Usu·rio\\Documents\\opencvfiles\\data\\haarcascades\\palm.xml");
+    palm_cascade.load("C:\\Users\\Usu√°rio\\Documents\\opencvfiles\\data\\haarcascades\\palm.xml");
 
-    // Iniciando a captura de vÌdeo
-    VideoCapture cap(1);
+    // Iniciando a captura de v√≠deo
+    VideoCapture cap(1);//caso de o erro -1 no console, mude a variael 'cap' para 0 ou 2, ex:  VideoCapture cap(0) ou  VideoCapture cap(2). 
     if (!cap.isOpened()) {
-        std::cout << "\n\n\nN„o foi possivel acessar sua camera. Tente mudar o parametro para um numero anterior ou seguinte." << endl;
+        std::cout << "\n\n\nN√£o foi possivel acessar sua camera. Tente mudar o parametro para um numero anterior ou seguinte." << endl;
         return -1;
     }
 
@@ -37,8 +37,8 @@ int main() {
     bool detectHandsEnabled = true;
 
     while (cap.read(frame)) {
-        // Redimensionar o quadro para uma resoluÁ„o menor
-        const double scale = 0.5; // Fator de escala para reduÁ„o de resoluÁ„o
+        // Redimensionar o quadro para uma resolu√ß√£o menor
+        const double scale = 0.5; // Fator de escala para redu√ß√£o de resolu√ß√£o
         resize(frame, frame, Size(), scale, scale);
 
         // Convertendo o quadro redimensionado para escala de cinza
@@ -51,10 +51,10 @@ int main() {
             face_cascade.detectMultiScale(gray, faces, 1.3, 5);
         }
 
-        // Imprimindo informaÁıes sobre as faces detectadas
+        // Imprimindo informa√ß√µes sobre as faces detectadas
         cout << "faces detected: " << faces.size() << endl;
 
-        // Desenhando ret‚ngulos e adicionando tags nas faces detectadas
+        // Desenhando ret√¢ngulos e adicionando tags nas faces detectadas
         for (const auto& face : faces) {
             rectangle(frame, face, Scalar(0, 255, 0), 2);
             string tag = "Face";
@@ -62,16 +62,16 @@ int main() {
             putText(frame, tag, tagPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
         }
 
-        // Detectando m„os no quadro
+        // Detectando m√£os no quadro
         std::vector<Rect> hands;
         if (detectHandsEnabled) {
             hand_cascade.detectMultiScale(gray, hands, 1.1, 3);
         }
 
-        // Imprimindo informaÁıes sobre as m„os fechadas detectadas
+        // Imprimindo informa√ß√µes sobre as m√£os fechadas detectadas
         cout << "Close Hands detected: " << hands.size() << endl;
 
-        // Desenhando ret‚ngulos e adicionando tags nas m„os detectadas
+        // Desenhando ret√¢ngulos e adicionando tags nas m√£os detectadas
         for (const auto& hand : hands) {
             rectangle(frame, hand, Scalar(255, 0, 0), 2);
             string tag = "Closed Hand";
@@ -79,16 +79,16 @@ int main() {
             putText(frame, tag, tagPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255, 0, 0), 2);
         }
 
-        // Detectando m„os abertas no quadro
+        // Detectando m√£os abertas no quadro
         std::vector<Rect> palms;
         if (detectHandsEnabled) {
             palm_cascade.detectMultiScale(gray, palms, 1.1, 3);
         }
 
-        // Imprimindo informaÁıes sobre as m„os abertas detectadas
+        // Imprimindo informa√ß√µes sobre as m√£os abertas detectadas
         cout << "Open Hands detected: " << palms.size() << endl;
 
-        // Desenhando ret‚ngulos e adicionando tags nas m„os abertas detectadas
+        // Desenhando ret√¢ngulos e adicionando tags nas m√£os abertas detectadas
         for (const auto& palm : palms) {
             rectangle(frame, palm, Scalar(255, 0, 0), 2);
             string tag = "Open Hand";
@@ -106,11 +106,11 @@ int main() {
         }
         else if (key == 'f') {
             detectFacesEnabled = !detectFacesEnabled;
-            cout << "DetecÁ„o de faces: " << (detectFacesEnabled ? "Ativada" : "Desativada") << endl;
+            cout << "Detec√ß√£o de faces: " << (detectFacesEnabled ? "Ativada" : "Desativada") << endl;
         }
         else if (key == 'h') {
             detectHandsEnabled = !detectHandsEnabled;
-            cout << "DetecÁ„o de m„os: " << (detectHandsEnabled ? "Ativada" : "Desativada") << endl;
+            cout << "Detec√ß√£o de m√£os: " << (detectHandsEnabled ? "Ativada" : "Desativada") << endl;
         }
     }
 
