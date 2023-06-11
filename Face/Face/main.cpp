@@ -26,7 +26,7 @@ int main() {
     palm_cascade.load("C:\\Users\\Usuário\\Documents\\opencvfiles\\data\\haarcascades\\palm.xml");
 
     // Iniciando a captura de vídeo
-    VideoCapture cap(1);//caso de o erro -1 no console, mude a variael 'cap' para 0 ou 2, ex:  VideoCapture cap(0) ou  VideoCapture cap(2). 
+    VideoCapture cap(1);//caso dê o erro -1 no console, mude a variael 'cap' para 0 ou 2, ex:  VideoCapture cap(0) ou  VideoCapture cap(2). 
     if (!cap.isOpened()) {
         std::cout << "\n\n\nNão foi possivel acessar sua camera. Tente mudar o parametro para um numero anterior ou seguinte." << endl;
         return -1;
