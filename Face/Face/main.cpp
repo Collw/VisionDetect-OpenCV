@@ -1,4 +1,4 @@
-//criado e desenvolvido por welabs
+//Codigo desenvolvido por welabs:www.weprofile.site
 #include <iostream>
 #include <clocale>
 #include <opencv2/opencv.hpp>
