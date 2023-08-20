@@ -1,4 +1,4 @@
-//Codigo desenvolvido por welabs:www.welabs.tech
+// Código desenvolvido por welabs: www.welabs.tech
 #include <iostream>
 #include <clocale>
 #include <opencv2/opencv.hpp>
@@ -13,20 +13,16 @@ int main() {
 
     setlocale(LC_ALL, "Portuguese");
 
-    // Carregando o arquivo de modelo pré-treinado para detecção facial
     CascadeClassifier face_cascade;
     face_cascade.load("C:\\Users\\Usuário\\Documents\\opencvfiles\\data\\haarcascades\\haarcascade_frontalface_default.xml");
 
-    // Carregando o arquivo de modelo pré-treinado para detecção de mãos
     CascadeClassifier hand_cascade;
     hand_cascade.load("C:\\Users\\Usuário\\Documents\\opencvfiles\\data\\haarcascades\\hand.xml");
 
-    // Carregando o arquivo de modelo pré-treinado para detecção de mãos abertas
     CascadeClassifier palm_cascade;
     palm_cascade.load("C:\\Users\\Usuário\\Documents\\opencvfiles\\data\\haarcascades\\palm.xml");
 
-    // Iniciando a captura de vídeo
-    VideoCapture cap(1);//caso dê o erro -1 no console, mude a variael 'cap' para 0 ou 2, ex:  VideoCapture cap(0) ou  VideoCapture cap(2). 
+    VideoCapture cap(1);
     if (!cap.isOpened()) {
         std::cout << "\n\n\nNão foi possivel acessar sua camera. Tente mudar o parametro para um numero anterior ou seguinte." << endl;
         return -1;
@@ -37,24 +33,23 @@ int main() {
     bool detectHandsEnabled = true;
 
     while (cap.read(frame)) {
-        // Redimensionar o quadro para uma resolução menor
-        const double scale = 0.5; // Fator de escala para redução de resolução
+        const double scale = 0.5;
         resize(frame, frame, Size(), scale, scale);
 
-        // Convertendo o quadro redimensionado para escala de cinza
         Mat gray;
         cvtColor(frame, gray, COLOR_BGR2GRAY);
 
-        // Detectando faces no quadro
         std::vector<Rect> faces;
         if (detectFacesEnabled) {
-            face_cascade.detectMultiScale(gray, faces, 1.3, 5);
+            double scaleFactor = 1.1;
+            int minNeighbors = 3;
+            int minSize = 30;
+            int maxSize = 300;
+            face_cascade.detectMultiScale(gray, faces, scaleFactor, minNeighbors, 0, Size(minSize, minSize), Size(maxSize, maxSize));
         }
 
-        // Imprimindo informações sobre as faces detectadas
-        cout << "faces detected: " << faces.size() << endl;
+        cout << "Faces detected: " << faces.size() << endl;
 
-        // Desenhando retângulos e adicionando tags nas faces detectadas
         for (const auto& face : faces) {
             rectangle(frame, face, Scalar(0, 255, 0), 2);
             string tag = "Face";
@@ -62,44 +57,42 @@ int main() {
             putText(frame, tag, tagPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
         }
 
-        // Detectando mãos no quadro
         std::vector<Rect> hands;
         if (detectHandsEnabled) {
-            hand_cascade.detectMultiScale(gray, hands, 1.1, 3);
+            double scaleFactor = 1.05;  // Ajuste o fator de escala
+            int minNeighbors = 5;       // Ajuste o número mínimo de vizinhos
+            int minSize = 50;           // Ajuste o tamanho mínimo da mão
+            hand_cascade.detectMultiScale(gray, hands, scaleFactor, minNeighbors, 0, Size(minSize, minSize));
         }
 
-        // Imprimindo informações sobre as mãos fechadas detectadas
-        cout << "Close Hands detected: " << hands.size() << endl;
+        cout << "Hands detected: " << hands.size() << endl;
 
-        // Desenhando retângulos e adicionando tags nas mãos detectadas
         for (const auto& hand : hands) {
-            rectangle(frame, hand, Scalar(255, 0, 0), 2);
-            string tag = "Closed Hand";
+            rectangle(frame, hand, Scalar(0, 0, 255), 2);
+            string tag = "Hand";
             Point tagPosition(hand.x, hand.y - 5);
-            putText(frame, tag, tagPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255, 0, 0), 2);
+            putText(frame, tag, tagPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
         }
 
-        // Detectando mãos abertas no quadro
         std::vector<Rect> palms;
         if (detectHandsEnabled) {
-            palm_cascade.detectMultiScale(gray, palms, 1.1, 3);
+            double scaleFactor = 1.05;  // Ajuste o fator de escala
+            int minNeighbors = 5;       // Ajuste o número mínimo de vizinhos
+            int minSize = 50;           // Ajuste o tamanho mínimo da mão aberta
+            palm_cascade.detectMultiScale(gray, palms, scaleFactor, minNeighbors, 0, Size(minSize, minSize));
         }
 
-        // Imprimindo informações sobre as mãos abertas detectadas
-        cout << "Open Hands detected: " << palms.size() << endl;
+        cout << "Palms detected: " << palms.size() << endl;
 
-        // Desenhando retângulos e adicionando tags nas mãos abertas detectadas
         for (const auto& palm : palms) {
             rectangle(frame, palm, Scalar(255, 0, 0), 2);
-            string tag = "Open Hand";
+            string tag = "Palm";
             Point tagPosition(palm.x, palm.y - 5);
             putText(frame, tag, tagPosition, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255, 0, 0), 2);
         }
 
-        // Exibindo o quadro resultante
-        imshow("OrangeDetection", frame);
+        imshow("Detection", frame);
 
-        // Verificar tecla pressionada
         char key = waitKey(1);
         if (key == 'q') {
             break;
@@ -114,7 +107,6 @@ int main() {
         }
     }
 
-    // Liberando os recursos
     cap.release();
     destroyAllWindows();
 
